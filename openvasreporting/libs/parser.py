@@ -148,19 +148,28 @@ def openvas_parser(input_files, min_level=Config.levels()["n"]):
 
             # --------------------
             #
+            # Error: shows only first Refrence
+            # for each has to be implemented
+            #
+            # like that:   for vuln_cves in vuln_cves_temp.findall("./ref"):
+            #
             # VULN_CVES
-            vuln_cves = nvt_tmp.find("./cve")
-            if vuln_cves is None or vuln_cves.text.lower() == "nocve":
+            vuln_cves_temp = nvt_tmp.find("./refs")
+            if vuln_cves_temp is None:
                 vuln_cves = []
             else:
-                vuln_cves = [vuln_cves.text.lower()]
+                vuln_cves = vuln_cves_temp.find("./ref")
+                if vuln_cves is None or vuln_cves.get("id").lower() == "nocve":
+                    vuln_cves = []
+                else:
+                    vuln_cves = [vuln_cves.get("id").lower()]
 
             logging.debug("* vuln_cves:\t{}".format(vuln_cves))  # DEBUG
 
             # --------------------
             #
             # VULN_REFERENCES
-            vuln_references = nvt_tmp.find("./xref")
+            vuln_references = nvt_tmp.find("./refs")
             if vuln_references is None or vuln_references.text.lower() == "noxref":
                 vuln_references = []
             else:

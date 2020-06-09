@@ -118,10 +118,10 @@ def export_to_excel(vuln_info, template=None, output_file='openvas_report.xlsx')
     workbook.set_properties({
         'title': output_file,
         'subject': 'OpenVAS report',
-        'author': 'TheGroundZero',
+        'author': 'Christopher Beddies',
         'category': 'report',
         'keywords': 'OpenVAS, report',
-        'comments': 'TheGroundZero (https://github.com/TheGroundZero)'})
+        'comments': 'CrisioDev (https://github.com/CrisioDev)'})
 
     # ====================
     # FORMATTING
