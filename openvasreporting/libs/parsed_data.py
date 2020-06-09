@@ -123,7 +123,7 @@ class Host(object):
         if not isinstance(ip, str):
             raise TypeError("Expected basestring, got '{}' instead".format(type(ip)))
 #        if not isinstance(host_name, str):
-        #        raise TypeError("Expected basestring, got '{}' instead".format(type(host_name)))
+#            raise TypeError("Expected basestring, got '{}' instead".format(type(host_name)))
 
         self.ip = ip
         self.host_name = host_name
