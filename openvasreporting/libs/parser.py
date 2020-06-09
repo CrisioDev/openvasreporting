@@ -158,11 +158,12 @@ def openvas_parser(input_files, min_level=Config.levels()["n"]):
             if vuln_cves_temp is None:
                 vuln_cves = []
             else:
-                vuln_cves = vuln_cves_temp.find("./ref")
-                if vuln_cves is None or vuln_cves.get("id").lower() == "nocve":
-                    vuln_cves = []
-                else:
-                    vuln_cves = [vuln_cves.get("id").lower()]
+                vuln_cves = []
+                for vuln_cve in vuln_cves_temp.findall("./ref"):
+                    if vuln_cve is None or vuln_cve.get("id").lower() == "nocve":
+                        vuln_cve = []
+                    else:
+                        vuln_cves.append(vuln_cve.get("id").lower())
 
             logging.debug("* vuln_cves:\t{}".format(vuln_cves))  # DEBUG
 
