@@ -170,7 +170,7 @@ def openvas_parser(input_files, min_level=Config.levels()["n"]):
             # --------------------
             #
             # VULN_REFERENCES
-            vuln_references = nvt_tmp.find("./refs")
+            vuln_references = nvt_tmp.find("./xref")
             if vuln_references is None or vuln_references.text.lower() == "noxref":
                 vuln_references = []
             else:
