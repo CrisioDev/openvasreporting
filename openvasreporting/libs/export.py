@@ -219,8 +219,8 @@ def export_to_excel(vuln_info, template=None, output_file='openvas_report.xlsx')
     # VULN BY FAMILY
     # --------------------
     ws_sum.merge_range("B19:C19", "VULNERABILITIES BY FAMILY", format_sheet_title_content)
-    ws_sum.write("B20", "family", format_table_titles)
-    ws_sum.write("C20", "vulns number", format_table_titles)
+    ws_sum.write("B20", "Family", format_table_titles)
+    ws_sum.write("C20", "Vulnerabilities", format_table_titles)
 
     last = 21
     for i, (family, number) in enumerate(iter(vuln_by_family.items()), last):
@@ -250,7 +250,7 @@ def export_to_excel(vuln_info, template=None, output_file='openvas_report.xlsx')
     # ====================
     # TABLE OF CONTENTS
     # ====================
-    sheet_name = "TOC"
+    sheet_name = "All Vulnerabilities"
     ws_toc = workbook.add_worksheet(sheet_name)
     ws_toc.set_tab_color(Config.colors()['blue'])
 
@@ -261,7 +261,7 @@ def export_to_excel(vuln_info, template=None, output_file='openvas_report.xlsx')
     ws_toc.set_column("E:E", 50)
     ws_toc.set_column("F:F", 7)
 
-    ws_toc.merge_range("B2:E2", "TABLE OF CONTENTS", format_sheet_title_content)
+    ws_toc.merge_range("B2:E2", "All Vulnerabilities", format_sheet_title_content)
     ws_toc.write("B3", "No.", format_table_titles)
     ws_toc.write("C3", "Vulnerability", format_table_titles)
     ws_toc.write("D3", "Level", format_table_titles)
