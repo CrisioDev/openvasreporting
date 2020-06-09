@@ -118,10 +118,10 @@ def export_to_excel(vuln_info, template=None, output_file='openvas_report.xlsx')
     workbook.set_properties({
         'title': output_file,
         'subject': 'OpenVAS report',
-        'author': 'TheGroundZero',
+        'author': 'Christopher Beddies',
         'category': 'report',
         'keywords': 'OpenVAS, report',
-        'comments': 'TheGroundZero (https://github.com/TheGroundZero)'})
+        'comments': 'CrisioDev (https://github.com/CrisioDev)'})
 
     # ====================
     # FORMATTING
@@ -324,7 +324,7 @@ def export_to_excel(vuln_info, template=None, output_file='openvas_report.xlsx')
         ws_vuln.merge_range("C6:G6", vuln.insight, format_table_cells)
         ws_vuln.set_row(5, __row_height(vuln.insight, content_width), None)
 
-        ws_vuln.write('B7', "CVEs", format_table_titles)
+        ws_vuln.write('B7', "References", format_table_titles)
         cves = ", ".join(vuln.cves)
         cves = cves.upper() if cves != "" else "No CVE"
         ws_vuln.merge_range("C7:G7", cves, format_table_cells)
@@ -343,7 +343,7 @@ def export_to_excel(vuln_info, template=None, output_file='openvas_report.xlsx')
         ws_vuln.write('B10', "Family", format_table_titles)
         ws_vuln.merge_range("C10:G10", vuln.family, format_table_cells)
 
-        ws_vuln.write('B11', "References", format_table_titles)
+        ws_vuln.write('B11', "Comments", format_table_titles)
         ws_vuln.merge_range("C11:G11", vuln.references, format_table_cells)
         ws_vuln.set_row(10, __row_height(vuln.references, content_width), None)
 
@@ -603,9 +603,9 @@ def export_to_word(vuln_info, template, output_file='openvas_report.docx'):
         hdr_cells[2].paragraphs[0].add_run('Recommendation').bold = True
         hdr_cells[3].paragraphs[0].add_run('Details').bold = True
         hdr_cells[4].paragraphs[0].add_run('CVSS').bold = True
-        hdr_cells[5].paragraphs[0].add_run('CVEs').bold = True
+        hdr_cells[5].paragraphs[0].add_run('References').bold = True
         hdr_cells[6].paragraphs[0].add_run('Family').bold = True
-        hdr_cells[7].paragraphs[0].add_run('References').bold = True
+        hdr_cells[7].paragraphs[0].add_run('Comments').bold = True
 
         for hdr_cell in hdr_cells:
             hdr_cell.width = Cm(3.58)
