@@ -50,15 +50,13 @@ Also, OpenVAS mixes their own threat levels with the [CVSS](https://www.first.or
 | -l          | --level    | Minimal level   | No       | n                                          |
 | -t          | --template | Docx template   | No       | openvasreporting/src/openvas-template.docx |
 
-## Export from Greenbone (GVM11)
+## How to
 
-
-
-## Examples
-
+### Export from Greenbone (GVM11)
 ### Create Excel report from 1 OpenVAS XML report using default settings
-
     python3 -m openvasreporting -i openvasreport.xml -f xlsx
+### Result
+
 
 ### Create Excel report from multiple OpenVAS reports using default settings
 
@@ -83,9 +81,8 @@ Worksheets are sorted according to CVSS score and are colored according to the v
 
 ## Ideas
 
-Some of the ideas I still have for future functionality:
+Some of the ideas by GroundZero on which I'm also working:
 
  - list vulnerabilities per host
  - filter by host (scope/exclude) as in OpenVAS2Report
  - select threat levels individually (e.g. none and low; but not med, high and crit)
- - import other formats (not only XML), e.g. CSV as suggested in [this issue](https://github.com/TheGroundZero/openvasreporting_server/issues/3)
