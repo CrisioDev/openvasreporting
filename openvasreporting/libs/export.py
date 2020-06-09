@@ -180,7 +180,7 @@ def export_to_excel(vuln_info, template=None, output_file='openvas_report.xlsx')
     # --------------------
     ws_sum.merge_range("B2:D2", "VULNERABILITY SUMMARY", format_sheet_title_content)
     ws_sum.write("B3", "Threat", format_table_titles)
-    ws_sum.write("C3", "Vulns number", format_table_titles)
+    ws_sum.write("C3", "Vulnerabilities", format_table_titles)
     ws_sum.write("D3", "Affected hosts", format_table_titles)
 
     for i, level in enumerate(Config.levels().values(), 4):
@@ -262,7 +262,7 @@ def export_to_excel(vuln_info, template=None, output_file='openvas_report.xlsx')
 
     ws_toc.merge_range("B2:E2", "TABLE OF CONTENTS", format_sheet_title_content)
     ws_toc.write("B3", "No.", format_table_titles)
-    ws_toc.write("C3", "Vuln Title", format_table_titles)
+    ws_toc.write("C3", "Vulnerability", format_table_titles)
     ws_toc.write("D3", "Level", format_table_titles)
     ws_toc.write("E3", "Hosts", format_table_titles)
 
@@ -303,7 +303,7 @@ def export_to_excel(vuln_info, template=None, output_file='openvas_report.xlsx')
         ws_vuln.set_column("H:H", 7, format_align_center)
         content_width = 120
 
-        ws_vuln.write('B2', "Title", format_table_titles)
+        ws_vuln.write('B2', "Vulnerability", format_table_titles)
         ws_vuln.merge_range("C2:G2", vuln.name, format_sheet_title_content)
         ws_vuln.set_row(1, __row_height(vuln.name, content_width), None)
 
@@ -484,7 +484,7 @@ def export_to_word(vuln_info, template, output_file='openvas_report.docx'):
     table_summary = document.add_table(rows=1, cols=3)
     hdr_cells = table_summary.rows[0].cells
     hdr_cells[0].paragraphs[0].add_run('Risk level').bold = True
-    hdr_cells[1].paragraphs[0].add_run('Vulns number').bold = True
+    hdr_cells[1].paragraphs[0].add_run('Vulnerabilities Count').bold = True
     hdr_cells[2].paragraphs[0].add_run('Affected hosts').bold = True
 
     # Provide data to table and charts
