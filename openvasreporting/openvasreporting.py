@@ -7,7 +7,7 @@
 import argparse
 
 from .libs.config import Config
-from .libs.parser import openvas_parser
+from .libs.parser import openvas_parser, host_parser
 from .libs.export import exporters
 
 
@@ -84,9 +84,10 @@ def convert(config):
         raise NotImplementedError("Filetype not supported, got {}, expecting one of {}".format(config.filetype,
                                                                                                exporters().keys()))
 
-    openvas_info = openvas_parser(config.input_files, config.min_level)
+    vuln_info = openvas_parser(config.input_files, config.min_level)
+    host_info = host_parser(config.input_files, config.min_level)
 
-    exporters()[config.filetype](openvas_info, config.template, config.output_file)
+    exporters()[config.filetype](vuln_info, config.template, config.output_file)
 
 
 def check_level(min_lvl):
