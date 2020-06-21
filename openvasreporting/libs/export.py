@@ -307,6 +307,9 @@ def export_to_excel(host_info, vuln_info, template=None, output_file='openvas_re
             ws_vuln = workbook.add_worksheet(name)
             ws_vuln.set_tab_color(Config.colors()[vuln[8].lower()])
 
+            if(host.host_name == ""):
+                host.host_name = "no hostname found"
+
             # --------------------
             # TABLE OF CONTENTS
             # --------------------
