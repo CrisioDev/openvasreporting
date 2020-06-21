@@ -9,22 +9,10 @@
 [![PyPI - Version](https://img.shields.io/pypi/v/OpenVAS-Reporting.svg)](https://pypi.org/project/OpenVAS-Reporting/)
 [![PyPI - Format](https://img.shields.io/pypi/format/OpenVAS-Reporting.svg)](https://pypi.org/project/OpenVAS-Reporting/)
 
-A tool to convert [OpenVAS](http://www.openvas.org/) XML into reports.
+A tool to convert [Greenbone](https://www.greenbone.net/) XML into reports.
 
-![Report example screenshot](docs/_static/img/OpenVASreporting.png?raw=true)
-
-*Read the full documentation at [https://openvas-reporting.sequr.be](https://openvas-reporting.sequr.be)*
-
-I forked [OpenVAS2Report](https://github.com/cr0hn/openvas_to_report) since it didn't manage to convert all reports I threw at it
-and because I wanted to learn how to use Python for working with XML and creating Excel files.  
+I forked [OpenVAS Reporting](https://github.com/TheGroundZero/openvasreporting) since I had lot of problems with the exported greenbone XMLs. Since we are using the Greenbone Source Edition this is the easiest way for us to create office reports.
 Also, OpenVAS mixes their own threat levels with the [CVSS](https://www.first.org/cvss/) scoring, the latter of which I prefer to use in my reports.
-
-Looking for a fix and providing an actual fix through a pull request would have been too much work,
-so I chose to fork the repo and try my own thing.  
-I reorganised some of the files, removed some functionality and added some extra, and rewrote some functions.
-
-At this moment in time, the script only output .xlsx documents in one format, this may (not) change in the future.
-
 
 ## Requirements
 
@@ -47,24 +35,10 @@ At this moment in time, the script only output .xlsx documents in one format, th
     # Install module (not required when running from repo base folder)
     #pip3 install .
     
-
-Alternatively, you can install the package through the Python package installer 'pip'.  
-This currently has some issues (see #4)
-
-    # Install Python3 and pip3
-    apt(-get) install python3 python3-pip # Debian, Ubuntu
-    yum -y install python3 python3-pip    # CentOS
-    dnf install python3 python3-pip       # Fedora
-    # Install the package
-    pip3 install OpenVAS-Reporting
-
-
 ## Usage
 
     # When working from the Git repo
     python3 -m openvasreporting -i [OpenVAS xml file(s)] [-o [Output file]] [-f [Output format]] [-l [minimal threat level (n, l, m, h, c)]] [-t [docx template]]
-    # When using the pip package
-    openvasreporting -i [OpenVAS xml file(s)] [-o [Output file]] [-f [Output format]] [-l [minimal threat level (n, l, m, h, c)]] [-t [docx template]]
 
 ### Parameters
 
@@ -76,11 +50,13 @@ This currently has some issues (see #4)
 | -l          | --level    | Minimal level   | No       | n                                          |
 | -t          | --template | Docx template   | No       | openvasreporting/src/openvas-template.docx |
 
-## Examples
+## How to
 
+### Export from Greenbone (GVM11)
 ### Create Excel report from 1 OpenVAS XML report using default settings
-
     python3 -m openvasreporting -i openvasreport.xml -f xlsx
+### Result
+
 
 ### Create Excel report from multiple OpenVAS reports using default settings
 
@@ -105,9 +81,8 @@ Worksheets are sorted according to CVSS score and are colored according to the v
 
 ## Ideas
 
-Some of the ideas I still have for future functionality:
+Some of the ideas by GroundZero on which I'm also working:
 
  - list vulnerabilities per host
  - filter by host (scope/exclude) as in OpenVAS2Report
  - select threat levels individually (e.g. none and low; but not med, high and crit)
- - import other formats (not only XML), e.g. CSV as suggested in [this issue](https://github.com/TheGroundZero/openvasreporting_server/issues/3)

@@ -8,6 +8,7 @@
 
 import re
 
+
 # Port object modifed to include result data field
 class Port(object):
     """Port information"""
@@ -20,8 +21,8 @@ class Port(object):
         :param protocol: port protocol (tcp, udp, ...)
         :type protocol: basestring
 
-	:param result: port result
-	:type result: str
+	    :param result: port result
+	    :type result: str
 
         :raises: TypeError, ValueError
         """
@@ -43,10 +44,10 @@ class Port(object):
 
     # Modified to include result in structure
     @staticmethod
-    def string2port(info,result):
+    def string2port(info, result):
         """
         Extract port number, protocol and description from an string.
-	return a port class with seperate port, protocol and result
+	    return a port class with seperate port, protocol and result
 
         ..note:
             Raises value error if information can't be processed.
@@ -56,16 +57,16 @@ class Port(object):
           2000
         # >>> print p.proto
           "tcp"
-	# >>> print p.result
-	  "result string"
+	    # >>> print p.result
+	    "result string"
 
         # >>> p=Port.string2port("general/icmp", "string test")
         # >>> print p.number
           0
         # >>> print p.proto
           "icmp"
-	# >>> print p.result
-	  "string test"
+	    # >>> print p.result
+	     "string test"
 
         :param info: raw string with port information
         :type info: basestring
@@ -122,17 +123,104 @@ class Host(object):
         """
         if not isinstance(ip, str):
             raise TypeError("Expected basestring, got '{}' instead".format(type(ip)))
-#        if not isinstance(host_name, str):
-#            raise TypeError("Expected basestring, got '{}' instead".format(type(host_name)))
+        #        if not isinstance(host_name, str):
+        #            raise TypeError("Expected basestring, got '{}' instead".format(type(host_name)))
 
         self.ip = ip
         self.host_name = host_name
 
+        # Hosts
+        self.vulns = []
+
+    # Add vuln to host like in Vulnerability just the other way around
+    # Edit like there can appear multiple Vulns like in "add_vuln_host"
+    def add_host_vuln(self, vuln_id, name, threat, **kwargs):
+        """
+        Add a host and a port associated to this vulnerability
+
+        :param vuln_id: OpenVAS plugin id
+        :type vuln_id: basestring
+
+        :param name: Vulnerability name
+        :type name: str
+
+        :param threat: Threat type: None, Low, Medium, High
+        :type threat: str
+
+        :param cves: list of CVEs
+        :type cves: list(str)
+
+        :param cvss: CVSS number value
+        :type cvss: float
+
+        :param level: Threat level according to CVSS: None, Low, Medium, High, Critical
+        :type level: str
+
+        :param tags: vulnerability tags
+        :type tags: dict
+
+        :param references: list of references
+        :type references: list(str)
+
+        :param family: Vulnerability family
+        :type family: str
+
+        :param result: Vulnerability result
+        :type description: str
+
+        :raises: TypeError
+        """
+        # Get info
+        cves = kwargs.get("cves", list()) or list()
+        cvss = kwargs.get("cvss", -1.0) or -1.0
+        level = kwargs.get("level", "None") or "None"
+        tags = kwargs.get("tags", dict()) or dict()
+        references = kwargs.get("references", "Uknown") or "Unknown"
+        family = kwargs.get("family", "Unknown") or "Unknown"
+        result = kwargs.get("description", "Unknown") or "Unknown"
+
+        if not isinstance(vuln_id, str):
+            raise TypeError("Expected basestring, got '{}' instead".format(type(vuln_id)))
+        if not isinstance(name, str):
+            raise TypeError("Expected basestring, got '{}' instead".format(type(name)))
+        if not isinstance(threat, str):
+            raise TypeError("Expected basestring, got '{}' instead".format(type(threat)))
+        if not isinstance(family, str):
+            raise TypeError("Expected basestring, got '{}' instead".format(type(family)))
+        if not isinstance(result, str):
+            raise TypeError("Expected basestring, got '{}' instead".format(type(result)))
+        if not isinstance(cves, list):
+            raise TypeError("Expected list, got '{}' instead".format(type(cves)))
+        else:
+            for x in cves:
+                if not isinstance(x, str):
+                    raise TypeError("Expected basestring, got '{}' instead".format(type(x)))
+
+        if not isinstance(cvss, (float, int)):
+            raise TypeError("Expected float, got '{}' instead".format(type(cvss)))
+        if not isinstance(level, str):
+            raise TypeError("Expected basestring, got '{}' instead".format(type(level)))
+        if not isinstance(tags, dict):
+            raise TypeError("Expected dict, got '{}' instead".format(type(tags)))
+        if not isinstance(references, str):
+            raise TypeError("Expected string, got '{}' instead".format(type(references)))
+        else:
+            for x in references:
+                if not isinstance(x, str):
+                    raise TypeError("Expected basestring, got '{}' instead".format(type(x)))
+
+        impact = tags.get('impact', '')
+        solution = tags.get('solution', '')
+        solution_type = tags.get('solution_type', '')
+        insight = tags.get('insight', '')
+
+        self.vulns.append((vuln_id, name, threat, tags, cvss,
+                                          cves, references, family,
+                                          level, result, impact, solution, solution_type, insight))
+
     def __eq__(self, other):
         return (
-                isinstance(other, Host) and
-                other.ip == self.ip and
-                other.host_name == self.host_name
+                other.ip == self.ip
         )
 
 
