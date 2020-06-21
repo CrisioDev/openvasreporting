@@ -395,7 +395,7 @@ def host_parser(input_files, min_level=Config.levels()["n"]):
 
             temp_host_store.add_host_vuln(vuln_id, name=vuln_name, threat=vuln_threat, tags=vuln_tags, cvss=vuln_cvss,
                                           cves=vuln_cves, references=vuln_references, family=vuln_family,
-                                          level=vuln_level)
+                                          level=vuln_level, result=vuln_result)
 
             hosts[vuln_host] = temp_host_store
 

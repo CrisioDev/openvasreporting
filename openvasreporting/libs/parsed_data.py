@@ -209,9 +209,14 @@ class Host(object):
                 if not isinstance(x, str):
                     raise TypeError("Expected basestring, got '{}' instead".format(type(x)))
 
+        impact = tags.get('impact', '')
+        solution = tags.get('solution', '')
+        solution_type = tags.get('solution_type', '')
+        insight = tags.get('insight', '')
+
         self.vulns.append((vuln_id, name, threat, tags, cvss,
                                           cves, references, family,
-                                          level))
+                                          level, result, impact, solution, solution_type, insight))
 
     def __eq__(self, other):
         return (
