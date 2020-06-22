@@ -314,7 +314,7 @@ def export_to_excel(host_info, vuln_info, template=None, output_file='openvas_re
             # TABLE OF CONTENTS
             # --------------------
             ws_hosts.write("B{}".format(current_line + 3), "{}".format(host.ip), format_table_cells)
-            ws_hosts.write_url("C{}".format(current_line + 3), "{}".format(name), format_table_cells,
+            ws_hosts.write_url("C{}".format(current_line + 3), "{}".format(host.host_name), format_table_cells,
                                string=host.host_name)
             ws_hosts.write("D{}".format(current_line + 3), "{:.1f} ({})".format(vuln[4], vuln[8].capitalize()),
                            format_toc[vuln[8]])
