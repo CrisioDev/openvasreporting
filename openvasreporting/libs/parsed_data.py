@@ -214,7 +214,13 @@ class Host(object):
         solution_type = tags.get('solution_type', '')
         insight = tags.get('insight', '')
 
-        self.vulns.append((vuln_id, name, threat, tags, cvss,
+        alreadyExists = bool(False)
+        for i in self.vulns:
+            if i[0] == vuln_id:
+                alreadyExists = bool(True)
+
+        if alreadyExists != bool(True):
+            self.vulns.append((vuln_id, name, threat, tags, cvss,
                                           cves, references, family,
                                           level, result, impact, solution, solution_type, insight))
 
