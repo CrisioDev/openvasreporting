@@ -351,8 +351,8 @@ def export_to_excel(host_info, vuln_info, template=None, output_file='openvas_re
             ws_vuln.set_row(1, __row_height(vuln[1], content_width), None)
 
             ws_vuln.write('B3', "Description", format_table_titles)
-            ws_vuln.merge_range("C3:G3", vuln[9], format_table_cells)
-            ws_vuln.set_row(2, __row_height(vuln[9], content_width), None)
+            ws_vuln.merge_range("C3:G3", vuln[13], format_table_cells)
+            ws_vuln.set_row(2, __row_height(vuln[13], content_width), None)
 
             ws_vuln.write('B4', "Impact", format_table_titles)
             ws_vuln.merge_range("C4:G4", vuln[10], format_table_cells)

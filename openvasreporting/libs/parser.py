@@ -188,7 +188,7 @@ def openvas_parser(input_files, min_level=Config.levels()["n"]):
             # VULN_DESCRIPTION
             vuln_result = vuln.find("./description")
             if vuln_result is None or vuln.find("./description").text is None:
-                vuln_result = ""
+                vuln_result = "No description found"
             else:
                 vuln_result = vuln_result.text
 
