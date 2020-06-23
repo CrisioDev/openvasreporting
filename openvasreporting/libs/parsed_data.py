@@ -209,6 +209,11 @@ class Host(object):
                 if not isinstance(x, str):
                     raise TypeError("Expected basestring, got '{}' instead".format(type(x)))
 
+        impact = tags.get('impact', '')
+        solution = tags.get('solution', '')
+        solution_type = tags.get('solution_type', '')
+        insight = tags.get('insight', '')
+
         alreadyExists = bool(False)
         for i in self.vulns:
             if i[0] == vuln_id:
