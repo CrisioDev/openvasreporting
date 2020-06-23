@@ -272,7 +272,7 @@ class Vulnerability(object):
         cvss = kwargs.get("cvss", -1.0) or -1.0
         level = kwargs.get("level", "None") or "None"
         tags = kwargs.get("tags", dict()) or dict()
-        references = kwargs.get("references", "Uknown") or "Unknown"
+        references = kwargs.get("references", list()) or list()
         family = kwargs.get("family", "Unknown") or "Unknown"
         result = kwargs.get("description", "Unknown") or "Unknown"
 
@@ -299,7 +299,7 @@ class Vulnerability(object):
             raise TypeError("Expected basestring, got '{}' instead".format(type(level)))
         if not isinstance(tags, dict):
             raise TypeError("Expected dict, got '{}' instead".format(type(tags)))
-        if not isinstance(references, str):
+        if not isinstance(references, list):
             raise TypeError("Expected string, got '{}' instead".format(type(references)))
         else:
             for x in references:
