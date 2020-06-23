@@ -351,8 +351,8 @@ def host_parser(input_files, min_level=Config.levels()["n"]):
             else:
                 vuln_cves = []
                 for vuln_cve in vuln_cves_temp.findall("./ref"):
-                    if vuln_cve is None or vuln_cve.get("id").lower() == "nocve":
-                        vuln_cve = []
+                    if vuln_cve is None or vuln_cve.get("id").lower() != "cve":
+                        vuln_cve = ""
                     else:
                         vuln_cves.append(vuln_cve.get("id").lower())
 
@@ -361,11 +361,16 @@ def host_parser(input_files, min_level=Config.levels()["n"]):
             # --------------------
             #
             # VULN_REFERENCES
-            vuln_references = nvt_tmp.find("./xref")
-            if vuln_references is None or vuln_references.text.lower() == "noxref":
+            vuln_references_temp = nvt_tmp.find("./refs")
+            if vuln_references_temp is None:
                 vuln_references = []
             else:
-                vuln_references = vuln_references.text.lower().replace("url:", "\n")
+                vuln_references = []
+                for vuln_ref in vuln_references_temp.findall("./ref"):
+                    if vuln_ref is None or vuln_ref.get("type").lower() == "cve":
+                        vuln_ref = ""
+                    else:
+                        vuln_references.append(vuln_ref.get("id").lower().replace("url:", "\n"))
 
             logging.debug("* vuln_references:\t{}".format(vuln_references))  # DEBUG
 
