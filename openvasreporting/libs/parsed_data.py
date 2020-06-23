@@ -166,7 +166,7 @@ class Host(object):
         :type family: str
 
         :param result: Vulnerability result
-        :type description: str
+        :type result: str
 
         :raises: TypeError
         """
@@ -177,7 +177,7 @@ class Host(object):
         tags = kwargs.get("tags", dict()) or dict()
         references = kwargs.get("references", list()) or list()
         family = kwargs.get("family", "Unknown") or "Unknown"
-        result = kwargs.get("description", "Unknown") or "Unknown"
+        result = kwargs.get("result", "Unknown") or "Unknown"
 
         if not isinstance(vuln_id, str):
             raise TypeError("Expected basestring, got '{}' instead".format(type(vuln_id)))
@@ -208,11 +208,6 @@ class Host(object):
             for x in references:
                 if not isinstance(x, str):
                     raise TypeError("Expected basestring, got '{}' instead".format(type(x)))
-
-        impact = tags.get('impact', '')
-        solution = tags.get('solution', '')
-        solution_type = tags.get('solution_type', '')
-        insight = tags.get('insight', '')
 
         alreadyExists = bool(False)
         for i in self.vulns:
