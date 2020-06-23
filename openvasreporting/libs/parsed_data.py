@@ -202,8 +202,8 @@ class Host(object):
             raise TypeError("Expected basestring, got '{}' instead".format(type(level)))
         if not isinstance(tags, dict):
             raise TypeError("Expected dict, got '{}' instead".format(type(tags)))
-        if not isinstance(references, str):
-            raise TypeError("Expected string, got '{}' instead".format(type(references)))
+        if not isinstance(references, list):
+            raise TypeError("Expected list, got '{}' instead".format(type(references)))
         else:
             for x in references:
                 if not isinstance(x, str):
