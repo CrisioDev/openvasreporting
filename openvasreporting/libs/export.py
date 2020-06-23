@@ -386,8 +386,10 @@ def export_to_excel(host_info, vuln_info, template=None, output_file='openvas_re
             ws_vuln.merge_range("C10:G10", vuln[7], format_table_cells)
 
             ws_vuln.write('B11', "Comments", format_table_titles)
-            ws_vuln.merge_range("C11:G11", vuln[6], format_table_cells)
-            ws_vuln.set_row(10, __row_height(vuln[6], content_width), None)
+            refs = ", ".join(vuln[6])
+            #refs = refs.upper() if refs != "" else "No CVE"
+            ws_vuln.merge_range("C11:G11", refs, format_table_cells)
+            ws_vuln.set_row(10, __row_height(refs, content_width), None)
 
     # ====================
     # TABLE OF CONTENTS
