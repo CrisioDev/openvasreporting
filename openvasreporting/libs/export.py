@@ -368,7 +368,6 @@ def export_to_excel(host_info, vuln_info, template=None, output_file='openvas_re
 
             ws_vuln.write('B7', "References", format_table_titles)
             cves = ", ".join(vuln[5])
-            cves = cves.upper() if cves != "" else "No CVE"
             ws_vuln.merge_range("C7:G7", cves, format_table_cells)
             ws_vuln.set_row(6, __row_height(cves, content_width), None)
 
