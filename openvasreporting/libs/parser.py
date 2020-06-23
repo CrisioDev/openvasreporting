@@ -351,10 +351,10 @@ def host_parser(input_files, min_level=Config.levels()["n"]):
             else:
                 vuln_cves = []
                 for vuln_cve in vuln_cves_temp.findall("./ref"):
-                    if vuln_cve is None or vuln_cve.get("id").lower() != "cve":
-                        vuln_cve = ""
+                    if vuln_cve.get("type").lower() == "cve":
+                        vuln_cves.append(vuln_cve.get("id").upper())
                     else:
-                        vuln_cves.append(vuln_cve.get("id").lower())
+                        vuln_cve = ""
 
             logging.debug("* vuln_cves:\t{}".format(vuln_cves))  # DEBUG
 
