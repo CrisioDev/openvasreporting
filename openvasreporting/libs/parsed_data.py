@@ -175,7 +175,7 @@ class Host(object):
         cvss = kwargs.get("cvss", -1.0) or -1.0
         level = kwargs.get("level", "None") or "None"
         tags = kwargs.get("tags", dict()) or dict()
-        references = kwargs.get("references", "Uknown") or "Unknown"
+        references = kwargs.get("references", list()) or list()
         family = kwargs.get("family", "Unknown") or "Unknown"
         result = kwargs.get("description", "Unknown") or "Unknown"
 
