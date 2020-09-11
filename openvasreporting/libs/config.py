@@ -57,8 +57,8 @@ class Config(object):
             'blue':     '#183868',
             'critical': '#702da0',
             'high':     '#c80000',
-            'medium':   '#ffc000',
-            'low':      '#00b050',
+            'medium':   '#DAA520',
+            'low':      '#2E8B57',
             'none':     '#0070c0',
         }
 

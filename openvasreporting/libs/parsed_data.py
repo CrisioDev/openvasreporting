@@ -150,6 +150,9 @@ class Host(object):
         :param cves: list of CVEs
         :type cves: list(str)
 
+        :param certs: list of CERTs
+        :type certs: list(str)
+
         :param cvss: CVSS number value
         :type cvss: float
 
@@ -168,16 +171,21 @@ class Host(object):
         :param result: Vulnerability result
         :type result: str
 
+        :param port: Port
+        :type port: int
+
         :raises: TypeError
         """
         # Get info
         cves = kwargs.get("cves", list()) or list()
+        certs = kwargs.get("certs", list()) or list()
         cvss = kwargs.get("cvss", -1.0) or -1.0
         level = kwargs.get("level", "None") or "None"
         tags = kwargs.get("tags", dict()) or dict()
         references = kwargs.get("references", list()) or list()
         family = kwargs.get("family", "Unknown") or "Unknown"
         result = kwargs.get("result", "Unknown") or "Unknown"
+        port = kwargs.get("port", 0) or 0
 
         if not isinstance(vuln_id, str):
             raise TypeError("Expected basestring, got '{}' instead".format(type(vuln_id)))
@@ -213,6 +221,9 @@ class Host(object):
         solution = tags.get('solution', '')
         solution_type = tags.get('solution_type', '')
         insight = tags.get('insight', '')
+        summary = tags.get('summary', '')
+        affected = tags.get('affected', '')
+        vuldetect = tags.get('vuldetect', '')
 
         alreadyExists = bool(False)
         for i in self.vulns:
@@ -222,7 +233,7 @@ class Host(object):
         if alreadyExists != bool(True):
             self.vulns.append((vuln_id, name, threat, tags, cvss,
                                           cves, references, family,
-                                          level, result, impact, solution, solution_type, insight))
+                                          level, result, impact, solution, solution_type, insight, summary, affected, vuldetect, certs, port))
 
     def __eq__(self, other):
         return (

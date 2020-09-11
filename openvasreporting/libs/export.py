@@ -85,7 +85,10 @@ def _get_collections_host(host_info):
     :return: host_info
     :rtype host_info: list(Vulnerability)
     """
-    host_info.sort(key=lambda key: key.ip)
+    host_info.sort(key=lambda key: (int(key.ip.split(".")[0]),
+                                    int(key.ip.split(".")[1]),
+                                    int(key.ip.split(".")[2]),
+                                    int(key.ip.split(".")[3])))
 
     return host_info
 
@@ -162,6 +165,19 @@ def export_to_excel(host_info, vuln_info, template=None, output_file='openvas_re
                                                'align': 'center', 'valign': 'top',
                                                'border': 1, 'text_wrap': 1})
     format_toc = {
+        'critical': workbook.add_format({'font_name': 'Tahoma', 'font_size': 10, 'font_color': 'white', 'text_wrap': 1, 'align': 'left',
+                                         'border': 1, 'valign': 'top', 'bg_color': Config.colors()['critical']}),
+        'high': workbook.add_format({'font_name': 'Tahoma', 'font_size': 10, 'font_color': 'white', 'text_wrap': 1, 'align': 'left',
+                                     'border': 1, 'valign': 'top', 'bg_color': Config.colors()['high']}),
+        'medium': workbook.add_format({'font_name': 'Tahoma', 'font_size': 10, 'font_color': 'white', 'text_wrap': 1, 'align': 'left',
+                                       'border': 1, 'valign': 'top', 'bg_color': Config.colors()['medium']}),
+        'low': workbook.add_format({'font_name': 'Tahoma', 'font_size': 10, 'font_color': 'white', 'text_wrap': 1, 'align': 'left',
+                                    'border': 1, 'valign': 'top', 'bg_color': Config.colors()['low']}),
+        'none': workbook.add_format({'font_name': 'Tahoma', 'font_size': 10, 'font_color': 'white', 'text_wrap': 1, 'align': 'left',
+                                     'border': 1, 'valign': 'top', 'bg_color': Config.colors()['none']})
+    }
+
+    format_toc_level = {
         'critical': workbook.add_format({'font_name': 'Tahoma', 'font_size': 10, 'font_color': 'white',
                                          'align': 'center', 'valign': 'top',
                                          'border': 1,
@@ -272,24 +288,51 @@ def export_to_excel(host_info, vuln_info, template=None, output_file='openvas_re
     ws_hosts.set_tab_color(Config.colors()['blue'])
 
     ws_hosts.set_column("A:A", 1)
-    ws_hosts.set_column("B:B", 20)
-    ws_hosts.set_column("C:C", 30)
-    ws_hosts.set_column("D:D", 15)
-    ws_hosts.set_column("E:E", 50)
-    ws_hosts.set_column("F:F", 40)
-    ws_hosts.set_column("G:G", 20)
-    ws_hosts.set_column("H:H", 13)
-    ws_hosts.set_column("I:I", 50)
+    ws_hosts.set_column("B:B", 15)
+    ws_hosts.set_column("C:C", 25)
+    ws_hosts.set_column("D:D", 10)
+    ws_hosts.set_column("E:E", 15)
+    ws_hosts.set_column("F:F", 15)
+    ws_hosts.set_column("G:G", 50)
+    ws_hosts.set_column("H:H", 50)
+    ws_hosts.set_column("I:I", 100)
+    ws_hosts.set_column("J:J", 50)
+    ws_hosts.set_column("K:K", 50)
+    ws_hosts.set_column("L:L", 50)
+    ws_hosts.set_column("M:M", 50)
+    ws_hosts.set_column("N:N", 50)
+    ws_hosts.set_column("O:O", 27)
+    ws_hosts.set_column("P:P", 24)
+    ws_hosts.set_column("Q:Q", 35)
+    ws_hosts.set_column("R:R", 26)
+    ws_hosts.set_column("S:S", 13)
+    ws_hosts.set_column("T:T", 13)
+    ws_hosts.set_column("U:U", 13)
+    ws_hosts.set_column("V:V", 18)
+    ws_hosts.set_column("W:W", 40)
 
-    ws_hosts.merge_range("B2:I2", "All Hosts", format_sheet_title_content)
+    ws_hosts.merge_range("B2:V2", "All Hosts", format_sheet_title_content)
     ws_hosts.write("B3", "Host", format_table_titles)
     ws_hosts.write("C3", "Host-Name", format_table_titles)
-    ws_hosts.write("D3", "Level", format_table_titles)
-    ws_hosts.write("E3", "Vulns", format_table_titles)
-    ws_hosts.write("F3", "Responsible", format_table_titles)
-    ws_hosts.write("G3", "Turn Off Until", format_table_titles)
-    ws_hosts.write("H3", "Turned Off", format_table_titles)
-    ws_hosts.write("I3", "Comments", format_table_titles)
+    ws_hosts.write("D3", "Port", format_table_titles)
+    ws_hosts.write("E3", "Level", format_table_titles)
+    ws_hosts.write("F3", "Solution Type", format_table_titles)
+    ws_hosts.write("G3", "NVT Name", format_table_titles)
+    ws_hosts.write("H3", "Summary", format_table_titles)
+    ws_hosts.write("I3", "Result", format_table_titles)
+    ws_hosts.write("J3", "Impact", format_table_titles)
+    ws_hosts.write("K3", "Affected", format_table_titles)
+    ws_hosts.write("L3", "Solution", format_table_titles)
+    ws_hosts.write("M3", "Vulnerability Insight", format_table_titles)
+    ws_hosts.write("N3", "Vulnerability Detection Method", format_table_titles)
+    ws_hosts.write("O3", "CVEs", format_table_titles)
+    ws_hosts.write("P3", "CERTs", format_table_titles)
+    ws_hosts.write("Q3", "References", format_table_titles)
+    ws_hosts.write("R3", "Responsible", format_table_titles)
+    ws_hosts.write("S3", "Open", format_table_titles)
+    ws_hosts.write("T3", "Turn Off Until", format_table_titles)
+    ws_hosts.write("U3", "Unable to Turn Off", format_table_titles)
+    ws_hosts.write("V3", "Comments", format_table_titles)
 
     # ====================
     # for each Host in host_info
@@ -304,92 +347,116 @@ def export_to_excel(host_info, vuln_info, template=None, output_file='openvas_re
             if len(name) > 27:
                 name = "{}..{}".format(name[0:15], name[-10:])
             name = "{:03X}_{}".format(current_line, name)
-            ws_vuln = workbook.add_worksheet(name)
-            ws_vuln.set_tab_color(Config.colors()[vuln[8].lower()])
+            # ws_vuln = workbook.add_worksheet(name)
+            # ws_vuln.set_tab_color(Config.colors()[vuln[8].lower()])
 
-            if(host.host_name == ""):
+            if host.host_name == "":
                 host.host_name = "no hostname found"
 
             # --------------------
             # TABLE OF CONTENTS
             # --------------------
-            ws_hosts.write("B{}".format(current_line + 3), "{}".format(host.ip), format_table_cells)
-            ws_hosts.write("C{}".format(current_line + 3), "{}".format(host.host_name), format_table_cells)
-            ws_hosts.write("D{}".format(current_line + 3), "{:.1f} ({})".format(vuln[4], vuln[8].capitalize()),
-                           format_toc[vuln[8]])
-            ws_hosts.write_url("E{}".format(current_line + 3), "internal:'{}'!A1".format(name), format_table_cells,
-                               string=vuln[1])
-            ws_hosts.write("F{}".format(current_line + 3), "{}".format(""), format_table_cells)
-            ws_hosts.write("G{}".format(current_line + 3), "{}".format(""), format_table_cells)
-            ws_hosts.write("H{}".format(current_line + 3), "{}".format(""), format_table_cells)
-            ws_hosts.write("I{}".format(current_line + 3), "{}".format(""), format_table_cells)
-            ws_vuln.write_url("A1", "internal:'{}'!A{}".format(ws_hosts.get_name(), current_line + 3),
-                              format_align_center,
-                              string="<< TOC")
-            ws_hosts.set_row(current_line + 3, __row_height(name, 150), None)
+            ws_hosts.write("B{}".format(current_line + 3), "{}".format(host.ip), format_toc_level[vuln[8]])
+            ws_hosts.write("C{}".format(current_line + 3), "{}".format(host.host_name), format_toc[vuln[8]])
+            ws_hosts.write("D{}".format(current_line + 3), "{}".format(vuln[18]), format_toc[vuln[8]])
+            ws_hosts.write("E{}".format(current_line + 3), "{:.1f} ({})".format(vuln[4], vuln[8].capitalize()),
+                           format_toc_level[vuln[8]])
+            ws_hosts.write("F{}".format(current_line + 3), "{}".format(vuln[12]), format_toc[vuln[8]])
+            # ws_hosts.write_url("G{}".format(current_line + 3), "internal:'{}'!A1".format(name), format_table_cells,
+            # string=vuln[1])
+            ws_hosts.write("G{}".format(current_line + 3), "{}".format(vuln[1]), format_toc[vuln[8]])
+            ws_hosts.write("H{}".format(current_line + 3), "{}".format(vuln[14]), format_toc[vuln[8]])
+            # print(__row_height(name, 150))
+            ws_hosts.write("I{}".format(current_line + 3), "{}".format(vuln[9]), format_toc[vuln[8]])
+            ws_hosts.write("J{}".format(current_line + 3), "{}".format(vuln[10]), format_toc[vuln[8]])
+            ws_hosts.write("K{}".format(current_line + 3), "{}".format(vuln[15]), format_toc[vuln[8]])
+            ws_hosts.write("L{}".format(current_line + 3), "{}".format(vuln[11]), format_toc[vuln[8]])
+            ws_hosts.write("M{}".format(current_line + 3), "{}".format(vuln[13]), format_toc[vuln[8]])
+            ws_hosts.write("N{}".format(current_line + 3), "{}".format(vuln[16]), format_toc[vuln[8]])
+            cves = ", ".join(vuln[5])
+            cves = cves.upper() if cves != "" else "No CVE"
+            ws_hosts.write("O{}".format(current_line + 3), "{}".format(cves), format_toc[vuln[8]])
+            certs = ", ".join(vuln[17])
+            certs = certs.upper() if certs != "" else "No CERTs"
+            ws_hosts.write("P{}".format(current_line + 3), "{}".format(certs), format_toc[vuln[8]])
+            refs = ", ".join(vuln[6])
+            refs = refs if refs != "" else "No References"
+            ws_hosts.write("Q{}".format(current_line + 3), "{}".format(refs), format_toc[vuln[8]])
+            ws_hosts.write("R{}".format(current_line + 3), "{}".format(""), format_toc[vuln[8]])
+            ws_hosts.write("S{}".format(current_line + 3), "{}".format("1"), format_toc[vuln[8]])
+            ws_hosts.write("T{}".format(current_line + 3), "{}".format(""), format_toc[vuln[8]])
+            ws_hosts.write("U{}".format(current_line + 3), "{}".format(""), format_toc[vuln[8]])
+            ws_hosts.write("V{}".format(current_line + 3), "{}".format(""), format_toc[vuln[8]])
+            ws_hosts.set_row((current_line + 2), 30)
+            # ws_vuln.write_url("A1", "internal:'{}'!A{}".format(ws_hosts.get_name(), current_line + 3),
+            #                  format_align_center,
+            #                  string="<< TOC")
+
             current_line = current_line + 1
 
             # --------------------
             # VULN INFO
             # --------------------
-            ws_vuln.set_column("A:A", 7, format_align_center)
-            ws_vuln.set_column("B:B", 20, format_align_center)
-            ws_vuln.set_column("C:C", 20, format_align_center)
-            ws_vuln.set_column("D:D", 50, format_align_center)
-            ws_vuln.set_column("E:E", 15, format_align_center)
-            ws_vuln.set_column("F:F", 15, format_align_center)
-            ws_vuln.set_column("G:G", 20, format_align_center)
-            ws_vuln.set_column("H:H", 7, format_align_center)
+            # ws_vuln.set_column("A:A", 7, format_align_center)
+            # ws_vuln.set_column("B:B", 20, format_align_center)
+            # ws_vuln.set_column("C:C", 20, format_align_center)
+            # ws_vuln.set_column("D:D", 50, format_align_center)
+            # ws_vuln.set_column("E:E", 15, format_align_center)
+            # ws_vuln.set_column("F:F", 15, format_align_center)
+            # ws_vuln.set_column("G:G", 20, format_align_center)
+            # ws_vuln.set_column("H:H", 7, format_align_center)
             content_width = 120
 
-            #                    self.vulns.append((vuln_id, name, threat, tags, cvss,
+            #                    ((vuln_id, name, threat, tags, cvss,
             #                                           cves, references, family,
-            #                                           level, result, impact, solution, solution_type, insight))
+            #                                           level, result, impact, solution, solution_type, insight, summary, affected, vuldetect, certs))
 
-            ws_vuln.write('B2', "Vulnerability", format_table_titles)
-            ws_vuln.merge_range("C2:G2", vuln[1], format_sheet_title_content)
-            ws_vuln.set_row(1, __row_height(vuln[1], content_width), None)
+            # ws_vuln.write('B2', "Vulnerability", format_table_titles)
+            # ws_vuln.merge_range("C2:G2", vuln[1], format_sheet_title_content)
+            # ws_vuln.set_row(1, __row_height(vuln[1], content_width), None)
 
-            ws_vuln.write('B3', "Description", format_table_titles)
-            ws_vuln.merge_range("C3:G3", vuln[13], format_table_cells)
-            ws_vuln.set_row(2, __row_height(vuln[13], content_width), None)
+            # ws_vuln.write('B3', "Description", format_table_titles)
+            # ws_vuln.merge_range("C3:G3", vuln[13], format_table_cells)
+            # ws_vuln.set_row(2, __row_height(vuln[13], content_width), None)
 
-            ws_vuln.write('B4', "Impact", format_table_titles)
-            ws_vuln.merge_range("C4:G4", vuln[10], format_table_cells)
-            ws_vuln.set_row(3, __row_height(vuln[10], content_width), None)
+            # ws_vuln.write('B4', "Impact", format_table_titles)
+            # ws_vuln.merge_range("C4:G4", vuln[10], format_table_cells)
+            # ws_vuln.set_row(3, __row_height(vuln[10], content_width), None)
 
-            ws_vuln.write('B5', "Recommendation", format_table_titles)
-            ws_vuln.merge_range("C5:G5", vuln[11], format_table_cells)
-            ws_vuln.set_row(4, __row_height(vuln[11], content_width), None)
+            # ws_vuln.write('B5', "Recommendation", format_table_titles)
+            # ws_vuln.merge_range("C5:G5", vuln[11], format_table_cells)
+            # ws_vuln.set_row(4, __row_height(vuln[11], content_width), None)
 
-            ws_vuln.write('B6', "Details", format_table_titles)
-            ws_vuln.merge_range("C6:G6", vuln[13], format_table_cells)
-            ws_vuln.set_row(5, __row_height(vuln[13], content_width), None)
+            # ws_vuln.write('B6', "Details", format_table_titles)
+            # ws_vuln.merge_range("C6:G6", vuln[13], format_table_cells)
+            # ws_vuln.set_row(5, __row_height(vuln[13], content_width), None)
 
-            ws_vuln.write('B7', "References", format_table_titles)
-            cves = ", ".join(vuln[5])
-            cves = cves.upper() if cves != "" else "No CVE"
-            ws_vuln.merge_range("C7:G7", cves, format_table_cells)
-            ws_vuln.set_row(6, __row_height(cves, content_width), None)
+            # ws_vuln.write('B7', "References", format_table_titles)
+            # cves = ", ".join(vuln[5])
+            # cves = cves.upper() if cves != "" else "No CVE"
+            # ws_vuln.merge_range("C7:G7", cves, format_table_cells)
+            # ws_vuln.set_row(6, __row_height(cves, content_width), None)
 
-            ws_vuln.write('B8', "CVSS", format_table_titles)
-            cvss = float(vuln[4])
-            if cvss >= 0.0:
-                ws_vuln.merge_range("C8:G8", "{:.1f}".format(cvss), format_table_cells)
-            else:
-                ws_vuln.merge_range("C8:G8", "{}".format("No CVSS"), format_table_cells)
+            # ws_vuln.write('B8', "CVSS", format_table_titles)
+            # cvss = float(vuln[4])
+            # if cvss >= 0.0:
+            #    ws_vuln.merge_range("C8:G8", "{:.1f}".format(cvss), format_table_cells)
+            # else:
+            #    ws_vuln.merge_range("C8:G8", "{}".format("No CVSS"), format_table_cells)
 
-            ws_vuln.write('B9', "Level", format_table_titles)
-            ws_vuln.merge_range("C9:G9", vuln[8].capitalize(), format_table_cells)
+            # ws_vuln.write('B9', "Level", format_table_titles)
+            # ws_vuln.merge_range("C9:G9", vuln[8].capitalize(), format_table_cells)
 
-            ws_vuln.write('B10', "Family", format_table_titles)
-            ws_vuln.merge_range("C10:G10", vuln[7], format_table_cells)
+            # ws_vuln.write('B10', "Family", format_table_titles)
+            # ws_vuln.merge_range("C10:G10", vuln[7], format_table_cells)
 
-            ws_vuln.write('B11', "Comments", format_table_titles)
-            refs = ", ".join(vuln[6])
-            #refs = refs.upper() if refs != "" else "No CVE"
-            ws_vuln.merge_range("C11:G11", refs, format_table_cells)
-            ws_vuln.set_row(10, __row_height(refs, content_width), None)
+            # ws_vuln.write('B11', "Comments", format_table_titles)
+            # refs = ", ".join(vuln[6])
+            # refs = refs.upper() if refs != "" else "No CVE"
+            # ws_vuln.merge_range("C11:G11", refs, format_table_cells)
+            # ws_vuln.set_row(10, __row_height(refs, content_width), None)
+
+    ws_sum.write_formula("D9", "{}".format(len(host_info)), format_table_titles)
 
     # ====================
     # TABLE OF CONTENTS
@@ -435,87 +502,9 @@ def export_to_excel(host_info, vuln_info, template=None, output_file='openvas_re
                      format_toc[vuln.level])
         ws_toc.write("E{}".format(i + 3), "{}".format(', '.join([host.ip for host, _ in vuln.hosts])),
                      format_table_cells)
-        ws_vuln.write_url("A2", "internal:'{}'!A{}".format(ws_toc.get_name(), i + 3), format_align_center,
-                          string="<< TOC")
+        # ws_vuln.write_url("A2", "internal:'{}'!A{}".format(ws_toc.get_name(), i + 3), format_align_center,
+        #                  string="<< TOC")
         ws_toc.set_row(i + 3, __row_height(name, 150), None)
-
-        # --------------------
-        # VULN INFO
-        # --------------------
-        # ws_vuln.set_column("A:A", 7, format_align_center)
-        # ws_vuln.set_column("B:B", 20, format_align_center)
-        # ws_vuln.set_column("C:C", 20, format_align_center)
-        # ws_vuln.set_column("D:D", 50, format_align_center)
-        # ws_vuln.set_column("E:E", 15, format_align_center)
-        # ws_vuln.set_column("F:F", 15, format_align_center)
-        # ws_vuln.set_column("G:G", 20, format_align_center)
-        # ws_vuln.set_column("H:H", 7, format_align_center)
-        # content_width = 120
-        #
-        # ws_vuln.write('B2', "Vulnerability", format_table_titles)
-        # ws_vuln.merge_range("C2:G2", vuln.name, format_sheet_title_content)
-        # ws_vuln.set_row(1, __row_height(vuln.name, content_width), None)
-        #
-        # ws_vuln.write('B3', "Description", format_table_titles)
-        # ws_vuln.merge_range("C3:G3", vuln.description, format_table_cells)
-        # ws_vuln.set_row(2, __row_height(vuln.description, content_width), None)
-        #
-        # ws_vuln.write('B4', "Impact", format_table_titles)
-        # ws_vuln.merge_range("C4:G4", vuln.impact, format_table_cells)
-        # ws_vuln.set_row(3, __row_height(vuln.impact, content_width), None)
-        #
-        # ws_vuln.write('B5', "Recommendation", format_table_titles)
-        # ws_vuln.merge_range("C5:G5", vuln.solution, format_table_cells)
-        # ws_vuln.set_row(4, __row_height(vuln.solution, content_width), None)
-        #
-        # ws_vuln.write('B6', "Details", format_table_titles)
-        # ws_vuln.merge_range("C6:G6", vuln.insight, format_table_cells)
-        # ws_vuln.set_row(5, __row_height(vuln.insight, content_width), None)
-        #
-        # ws_vuln.write('B7', "References", format_table_titles)
-        # cves = ", ".join(vuln.cves)
-        # cves = cves.upper() if cves != "" else "No CVE"
-        # ws_vuln.merge_range("C7:G7", cves, format_table_cells)
-        # ws_vuln.set_row(6, __row_height(cves, content_width), None)
-        #
-        # ws_vuln.write('B8', "CVSS", format_table_titles)
-        # cvss = float(vuln.cvss)
-        # if cvss >= 0.0:
-        #     ws_vuln.merge_range("C8:G8", "{:.1f}".format(cvss), format_table_cells)
-        # else:
-        #     ws_vuln.merge_range("C8:G8", "{}".format("No CVSS"), format_table_cells)
-        #
-        # ws_vuln.write('B9', "Level", format_table_titles)
-        # ws_vuln.merge_range("C9:G9", vuln.level.capitalize(), format_table_cells)
-        #
-        # ws_vuln.write('B10', "Family", format_table_titles)
-        # ws_vuln.merge_range("C10:G10", vuln.family, format_table_cells)
-        #
-        # ws_vuln.write('B11', "Comments", format_table_titles)
-        # ws_vuln.merge_range("C11:G11", vuln.references, format_table_cells)
-        # ws_vuln.set_row(10, __row_height(vuln.references, content_width), None)
-        #
-        # ws_vuln.write('C13', "IP", format_table_titles)
-        # ws_vuln.write('D13', "Host name", format_table_titles)
-        # ws_vuln.write('E13', "Port number", format_table_titles)
-        # ws_vuln.write('F13', "Port protocol", format_table_titles)
-        # ws_vuln.write('G13', "Port Result", format_table_titles)
-
-        # --------------------
-        # AFFECTED HOSTS
-        # --------------------
-        # for j, (host, port) in enumerate(vuln.hosts, 14):
-        #
-        #     ws_vuln.write("C{}".format(j), host.ip)
-        #     ws_vuln.write("D{}".format(j), host.host_name if host.host_name else "-")
-        #
-        #     if port:
-        #         ws_vuln.write("E{}".format(j), "" if port.number == 0 else port.number)
-        #         ws_vuln.write("F{}".format(j), port.protocol)
-        #         ws_vuln.write("G{}".format(j), port.result, format_table_cells)
-        #         ws_vuln.set_row(j, __row_height(port.result, content_width), None)
-        #     else:
-        #         ws_vuln.write("E{}".format(j), "No port info")
 
     workbook.close()
 

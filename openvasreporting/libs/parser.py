@@ -339,11 +339,6 @@ def host_parser(input_files, min_level=Config.levels()["n"]):
 
             # --------------------
             #
-            # Error: shows only first Refrence
-            # for each has to be implemented
-            #
-            # like that:   for vuln_cves in vuln_cves_temp.findall("./ref"):
-            #
             # VULN_CVES
             vuln_cves_temp = nvt_tmp.find("./refs")
             if vuln_cves_temp is None:
@@ -358,6 +353,22 @@ def host_parser(input_files, min_level=Config.levels()["n"]):
 
             logging.debug("* vuln_cves:\t{}".format(vuln_cves))  # DEBUG
 
+            #----------------------------
+            #
+            # VULN_CERTS
+            vuln_certs_temp = nvt_tmp.find("./refs")
+            if vuln_certs_temp is None:
+                vuln_certs = []
+            else:
+                vuln_certs = []
+                for vuln_cert in vuln_certs_temp.findall("./ref"):
+                    if (vuln_cert.get("type").lower() == "cert-bund") or (vuln_cert.get("type").lower() == "dfn-cert"):
+                        vuln_certs.append(vuln_cert.get("id").upper())
+                    else:
+                        vuln_cert = ""
+
+            logging.debug("* vuln_certs:\t{}".format(vuln_certs))  # DEBUG
+
             # --------------------
             #
             # VULN_REFERENCES
@@ -367,7 +378,7 @@ def host_parser(input_files, min_level=Config.levels()["n"]):
             else:
                 vuln_references = []
                 for vuln_ref in vuln_references_temp.findall("./ref"):
-                    if vuln_ref is None or vuln_ref.get("type").lower() == "cve":
+                    if vuln_ref is None or vuln_ref.get("type").lower() == "cve" or (vuln_ref.get("type").lower() == "cert-bund") or (vuln_ref.get("type").lower() == "dfn-cert"):
                         vuln_ref = ""
                     else:
                         vuln_references.append(vuln_ref.get("id").lower().replace("url:", "\n"))
@@ -404,8 +415,8 @@ def host_parser(input_files, min_level=Config.levels()["n"]):
                 temp_host_store = Host(vuln_host, vuln_host_name)
 
             temp_host_store.add_host_vuln(vuln_id, name=vuln_name, threat=vuln_threat, tags=vuln_tags, cvss=vuln_cvss,
-                                          cves=vuln_cves, references=vuln_references, family=vuln_family,
-                                          level=vuln_level, result=vuln_result)
+                                          cves=vuln_cves, certs=vuln_certs, references=vuln_references, family=vuln_family,
+                                          level=vuln_level, result=vuln_result, port=vuln_port)
 
             hosts[vuln_host] = temp_host_store
 
