@@ -7,6 +7,15 @@
 """This file contains data structures"""
 
 import re
+from difflib import SequenceMatcher
+
+# DEBUG
+import sys
+import logging
+
+logging.basicConfig(stream=sys.stderr, level=logging.DEBUG,
+                    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
+
 
 
 # Port object modifed to include result data field
@@ -131,6 +140,7 @@ class Host(object):
 
         # Hosts
         self.vulns = []
+        self.affected = []
 
     # Add vuln to host like in Vulnerability just the other way around
     # Edit like there can appear multiple Vulns like in "add_vuln_host"
@@ -171,6 +181,9 @@ class Host(object):
         :param result: Vulnerability result
         :type result: str
 
+        :param qod: Quality of Detection
+        :type qod: int
+
         :param port: Port
         :type port: int
 
@@ -186,6 +199,7 @@ class Host(object):
         family = kwargs.get("family", "Unknown") or "Unknown"
         result = kwargs.get("result", "Unknown") or "Unknown"
         port = kwargs.get("port", 0) or 0
+        qod = kwargs.get("qod", 0) or 0
 
         if not isinstance(vuln_id, str):
             raise TypeError("Expected basestring, got '{}' instead".format(type(vuln_id)))
@@ -232,13 +246,121 @@ class Host(object):
 
         if alreadyExists != bool(True):
             self.vulns.append((vuln_id, name, threat, tags, cvss,
-                                          cves, references, family,
-                                          level, result, impact, solution, solution_type, insight, summary, affected, vuldetect, certs, port))
+                               cves, references, family,
+                               level, result, impact, solution, solution_type, insight, summary, affected, vuldetect,
+                               certs, port, qod))
+
+        # Add vuln to host like in Vulnerability just the other way around
+        # Edit like there can appear multiple Vulns like in "add_vuln_host"
+
+    def add_host_affected(self, affected, **kwargs):
+        """
+        Add a host and a port associated to this vulnerability
+        :param affected: Affected Version description
+        :type affected: str
+
+        :param solution: Solution description
+        :type solution: str
+
+        :param cves: list of CVEs
+        :type cves: list(str)
+
+        :param certs: list of CERTs
+        :type certs: list(str)
+
+        :param qod: Quality of Detection
+        :type qod: int
+
+        :param cvss: CVSS number value
+        :type cvss: float
+
+        :param level: Threat level according to CVSS: None, Low, Medium, High, Critical
+        :type level: str
+
+        :param tags: vulnerability tags
+        :type tags: dict
+
+        """
+        # Get info
+        # cves = kwargs.get("cves", list()) or list()
+        # certs = kwargs.get("certs", list()) or list()
+        # cvss = kwargs.get("cvss", -1.0) or -1.0
+        solution = kwargs.get("solution", "None") or "None"
+        level = kwargs.get("level", "None") or "None"
+        # tags = kwargs.get("tags", dict()) or dict()
+        # references = kwargs.get("references", list()) or list()
+        # family = kwargs.get("family", "Unknown") or "Unknown"
+        # result = kwargs.get("result", "Unknown") or "Unknown"
+        # port = kwargs.get("port", 0) or 0
+        qod = kwargs.get("qod", 0) or 0
+
+        if not isinstance(solution, str):
+            raise TypeError("Expected basestring, got '{}' instead".format(type(solution)))
+        if not isinstance(level, str):
+            raise TypeError("Expected basestring, got '{}' instead".format(type(level)))
+        # if not isinstance(name, str):
+        #    raise TypeError("Expected basestring, got '{}' instead".format(type(name)))
+        # if not isinstance(threat, str):
+        #    raise TypeError("Expected basestring, got '{}' instead".format(type(threat)))
+        # if not isinstance(family, str):
+        #    raise TypeError("Expected basestring, got '{}' instead".format(type(family)))
+        # if not isinstance(result, str):
+        #    raise TypeError("Expected basestring, got '{}' instead".format(type(result)))
+        # if not isinstance(cves, list):
+        #    raise TypeError("Expected list, got '{}' instead".format(type(cves)))
+        # else:
+        #    for x in cves:
+        #        if not isinstance(x, str):
+        #            raise TypeError("Expected basestring, got '{}' instead".format(type(x)))
+
+        # if not isinstance(cvss, (float, int)):
+        #    raise TypeError("Expected float, got '{}' instead".format(type(cvss)))
+        # if not isinstance(level, str):
+        #    raise TypeError("Expected basestring, got '{}' instead".format(type(level)))
+        # if not isinstance(tags, dict):
+        #    raise TypeError("Expected dict, got '{}' instead".format(type(tags)))
+        # if not isinstance(references, list):
+        #    raise TypeError("Expected list, got '{}' instead".format(type(references)))
+        # else:
+        #    for x in references:
+        #        if not isinstance(x, str):
+        #            raise TypeError("Expected basestring, got '{}' instead".format(type(x)))
+
+        # impact = tags.get('impact', '')
+        # solution = tags.get('solution', '')
+        # solution_type = tags.get('solution_type', '')
+        # insight = tags.get('insight', '')
+        # summary = tags.get('summary', '')
+        # affected = tags.get('affected', '')
+        # vuldetect = tags.get('vuldetect', '')
+
+        counter = 1
+        alreadyExists = bool(False)
+
+        for k, i in enumerate(self.affected):
+            if 0.7 < (similar(i[0], affected)):
+#                logging.debug("######")
+ #               logging.debug(i[0])
+  #              logging.debug(affected)
+   #             logging.debug(similar(i[0], affected))
+    #            logging.debug("######")
+                temp_i = list(i)
+                temp_i[3] = temp_i[3] + 1
+                if convert_level(temp_i[2]) < convert_level(self.affected[k][2]):
+                    temp_i[2] = self.affected[k][2]
+                self.affected[k] = tuple(temp_i)
+                alreadyExists = bool(True)
+
+        if alreadyExists != bool(True):
+            self.affected.append((affected, solution, level, counter, qod))
 
     def __eq__(self, other):
         return (
                 other.ip == self.ip
         )
+
+
+
 
 
 class Vulnerability(object):
@@ -388,3 +510,39 @@ class Vulnerability(object):
                     return False
 
         return True
+
+
+def similar(a, b):
+    return SequenceMatcher(None, a, b).ratio()
+
+def convert_level(level):
+    if level == 'critical':
+        return 5
+    elif level == 'high':
+        return 4
+    elif level == 'medium':
+        return 3
+    elif level == 'low':
+        return 2
+    elif level == 'None':
+        return 1
+    else:
+        return 0
+
+
+def backconvert_level(level):
+    if level == 5:
+        return 'critical'
+    elif level == 4:
+        return 'high'
+    elif level == 3:
+        return 'medium'
+    elif level == 2:
+        return 'low'
+    elif level == 1:
+        return 'None'
+    else:
+        return 'None'
+
+
+

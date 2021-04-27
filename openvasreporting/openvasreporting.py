@@ -7,7 +7,7 @@
 import argparse
 
 from .libs.config import Config
-from .libs.parser import openvas_parser, host_parser
+from .libs.parser import openvas_parser, host_parser, affected_parser
 from .libs.export import exporters
 
 
@@ -86,8 +86,9 @@ def convert(config):
 
     vuln_info = openvas_parser(config.input_files, config.min_level)
     host_info = host_parser(config.input_files, config.min_level)
+    affected_info = affected_parser(config.input_files, config.min_level)
 
-    exporters()[config.filetype](host_info, vuln_info, config.template, config.output_file)
+    exporters()[config.filetype](host_info, vuln_info, affected_info, config.template, config.output_file)
 
 
 def check_level(min_lvl):
